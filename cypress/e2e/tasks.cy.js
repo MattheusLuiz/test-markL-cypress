@@ -2,6 +2,17 @@
 
 
 describe('Tarefas', () => {
+
+    let testData;
+
+
+    before(() => {
+        cy.fixture('tasks')
+        .then(t => {
+            testData = t
+        })
+    });
+
     context('cadastro', () => {
         it('Deve cadastrar uma nova tarefa', () => {
             const taskName = 'Ler um livro de Node.JS'
@@ -15,10 +26,7 @@ describe('Tarefas', () => {
     
     
         it('Não deve permitir tarefa duplicada', () => {
-            const task = {
-                name: 'Estudar JavaScript',
-                is_done: false
-            }
+            const task = testData.dup
     
             cy.removeTaskByName(task.name)
             cy.postTask(task)
