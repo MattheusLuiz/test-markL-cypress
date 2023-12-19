@@ -2,7 +2,6 @@
 
 
 describe('Tarefas', () => {
-
     context('cadastro', () => {
         it('Deve cadastrar uma nova tarefa', () => {
             const taskName = 'Ler um livro de Node.JS'
@@ -35,5 +34,28 @@ describe('Tarefas', () => {
             cy.createTask()
             cy.isRequired('This is a required field')
         })
+    });
+
+    context('atualização', () => {
+        it.only('Deve concluir uma tarefa', () => {
+            const task = {
+                name: 'Pagar conta de consumo',
+                is_done: false
+            }
+
+            cy.removeTaskByName(task.name)
+            cy.postTask(task)
+
+            cy.visit('http://localhost:8080')
+
+            cy.contains('p', task.name)
+            .parent()
+            .find('button[class*=ItemToggle]')
+            .click()
+
+
+            cy.contains('p', task.name)
+            .should('have.css', 'text-decoration-line', 'line-through')
+        });
     });
 });
